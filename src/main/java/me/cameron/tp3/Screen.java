@@ -56,8 +56,13 @@ public class Screen extends JPanel implements ActionListener {
 	}
 
 	public void load() {
-		for (int i = 0; i != 5; i++)
-			balls.add(new Ball(250, 250));
+		try {
+		for (int i = 0; i != 10; i++)
+			balls.add(new Ball(new Random().nextInt(getWidth()), new Random().nextInt(getHeight())));
+		}catch(Exception ex) {
+			for (int i = 0; i != 5; i++)
+				balls.add(new Ball(new Random().nextInt(500), new Random().nextInt(500)));
+			}
 	}
 
 	public void unload() {
@@ -116,7 +121,7 @@ public class Screen extends JPanel implements ActionListener {
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				pause = true;
 				unload();
-				load();
+//				load();
 				pause = false;
 			}
 
@@ -130,7 +135,7 @@ public class Screen extends JPanel implements ActionListener {
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			Ball ball = new Ball(mx,my);
-			ball.setVelocity(new Vector(Math.abs(mx-e.getX())/50, Math.abs(my-e.getY())/50));
+			ball.setVelocity(new Vector((e.getX()-mx)/50, (my-e.getY())/50));
 			balls.add(ball);
 			
 			mx=0;
