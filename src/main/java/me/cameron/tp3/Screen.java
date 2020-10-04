@@ -37,6 +37,8 @@ public class Screen extends JPanel implements ActionListener {
 	double my = 0;
 	double mx1 = 0;
 	double my1 = 0;
+	
+	int l = 0;
 
 	public Screen() {
 		setBackground(Color.WHITE);
@@ -79,8 +81,15 @@ public class Screen extends JPanel implements ActionListener {
 			ball.move();
 			ball.draw(g);
 		}
+		l = l+1;
+		
+		int h = g.getFontMetrics().getHeight();
+		
+		Utils.drawOutlineString("Balls Size: " + balls.size(), 4, h, Utils.generateColor(l), Color.BLACK, g);
+		double p = Math.sqrt(Math.pow(Math.abs(mx-mx1)/50, 2) + Math.pow(Math.abs(my-my1)/50, 2));
+		Utils.drawOutlineString("Magnitude: " + p, 4, h*2, Utils.generateColor(l), Color.BLACK, g);
 
-		while (balls.size() > 20) {
+		while (balls.size() > 30) {
 			balls.removeFirst();
 		}
 
@@ -102,7 +111,7 @@ public class Screen extends JPanel implements ActionListener {
 				load();
 			}
 			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-				pause();
+				pause = !pause;
 			}
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				pause = true;
@@ -150,6 +159,7 @@ public class Screen extends JPanel implements ActionListener {
 	}
 
 	public void pause() {
+		pause = true;
 	}
 
 }

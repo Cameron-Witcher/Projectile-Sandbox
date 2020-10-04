@@ -17,6 +17,7 @@ public class Ball {
 	double g = 0.19;
 	double u = 0;
 	double theta = 0;
+	double f = 0.009;
 
 	public Ball(double x, double y) {
 		this.x = x;
@@ -61,12 +62,15 @@ public class Ball {
 //				+ ((1 / 2) * g * Math.pow(lifetime, 2)));
 		
 	}
+	
+	
 
 	public void draw(Graphics g) {
 		Color color = g.getColor();
-		
-		g.setColor(Color.BLUE);
-		for(int i =0; i!=50;i++) {
+		g.setColor(Color.RED);
+		for(int i =0; i!=100;i++) {
+			
+			g.setColor(new Color(g.getColor().getRed(), i, g.getColor().getBlue()));
 			
 			if(lifetime-i < 0) {
 				continue;
@@ -86,9 +90,10 @@ public class Ball {
 //					5);
 			
 		}
-		g.setColor(Color.RED);
+		g.setColor(Utils.generateColor(lifetime,f));
 		
-		g.fillRect((int)x-5, (int)y-5, 10, 10);
+		
+		g.fillOval((int)x-5, (int)y-5, 10, 10);
 //		g.drawString("Y: " + (u*Math.sin(theta)-Math.pow(((0.5)*this.g*lifetime),2)),(int) x,(int) y-15);
 //		g.drawString("X: " + u*Math.cos(theta),(int) x,(int) y-30);
 		
