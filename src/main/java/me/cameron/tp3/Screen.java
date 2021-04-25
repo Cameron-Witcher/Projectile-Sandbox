@@ -22,7 +22,7 @@ public class Screen extends JPanel implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	int DELAY = 1;
+	int DELAY = 15;
 	Timer timer;
 	Random random;
 	boolean pause = false;
@@ -94,7 +94,7 @@ public class Screen extends JPanel implements ActionListener {
 		double p = Math.sqrt(Math.pow(Math.abs(mx-mx1)/50, 2) + Math.pow(Math.abs(my-my1)/50, 2));
 		Utils.drawOutlineString("Magnitude: " + p, 4, h*2, Utils.generateColor(l), Color.BLACK, g);
 
-		while (balls.size() > 30) {
+		while (balls.size() > 100) {
 			balls.removeFirst();
 		}
 
@@ -134,8 +134,16 @@ public class Screen extends JPanel implements ActionListener {
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
+//			System.out.println(getWidth());
+//			for(int i =0;i!=getWidth()/10;i++) {
+//				Ball ball = new Ball(i*10,50);
+//				ball.setVelocity(new Vector(0,0));
+//				balls.add(ball);
+//			}
+//			
 			Ball ball = new Ball(mx,my);
 			ball.setVelocity(new Vector((e.getX()-mx)/50, (my-e.getY())/50));
+//			ball.setVelocity(new Vector(0, 0));
 			balls.add(ball);
 			
 			mx=0;

@@ -3,6 +3,7 @@ package me.cameron.tp3;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -20,8 +21,11 @@ public class Ball {
 	double u = 0;
 	double theta = 0;
 	double f = 0.009;
+	double size = 10;
 
 	LinkedList<Point> mem = new LinkedList<>();
+
+	Rectangle bounds;
 
 	public Ball(double x, double y) {
 		this.x = x;
@@ -32,6 +36,7 @@ public class Ball {
 		u = Math.sqrt(Math.pow(vel.getX(), 2) + Math.pow(vel.getY(), 2));
 		xi = x;
 		yi = y;
+		bounds = new Rectangle((int) (x - size / 2), (int) (y - size / 2), (int) size, (int) size);
 
 	}
 
@@ -53,7 +58,7 @@ public class Ball {
 
 		vel.y = vel.y - (0.095) * g;
 
-			vel.x = vel.x * 0.9999;
+		vel.x = vel.x * 0.9999;
 //		vel.y = vel.y * 0.9;
 
 		if (x + vel.x >= Main.getWindow().getScreen().getWidth() || x + vel.x <= 0) {
@@ -61,12 +66,25 @@ public class Ball {
 		}
 
 		if (y - vel.y >= Main.getWindow().getScreen().getHeight() || y - vel.y <= 0) {
-			vel.y = vel.y * -0.8;
+			vel.y = vel.y * -0.9;
 		}
+		
+		for(Ball ball : Main.getWindow().getScreen().balls) {
+			if(this.equals(ball)) continue;
+			if(bounds.intersects(ball.bounds)) {
+				if(bounds.getMaxX() > ball.bounds.getMinX() || bounds.getMinX() > ball.bounds.getMaxX()) {
+					vel.x = vel.x * -1;
+				}
+				if(bounds.getMaxY() > ball.bounds.getMinY() || bounds.getMinY() > ball.bounds.getMaxY()) {
+					vel.y = vel.y * -0.9;
+				}
+			}
+		}
+		
 
 		x = x + vel.getX();
 		y = y - vel.getY();
-		if (y+1 >= Main.getWindow().getScreen().getHeight())
+		if (y + 1 >= Main.getWindow().getScreen().getHeight())
 			vel.x = vel.x * 0.9;
 
 		mem.add(new Point((int) x, (int) y));
@@ -88,6 +106,9 @@ public class Ball {
 //		x = x + (u * lifetime * Math.cos(theta));
 //		y = y + (vel.getY() * lifetime * Math.sin(theta)
 //				+ ((1 / 2) * g * Math.pow(lifetime, 2)));
+		
+		
+		bounds = new Rectangle((int) (x - size / 2), (int) (y - size / 2), (int) size, (int) size);
 
 	}
 
@@ -100,12 +121,15 @@ public class Ball {
 		for (Point p : mem) {
 			if (lp != null) {
 				l = l + 1;
-				g.setColor(Utils.generateColor(l,0.03));
+				g.setColor(Utils.generateColor(l, 0.05));
 				g.drawLine(p.x, p.y, lp.x, lp.y);
 			}
-			
+
 			lp = p;
 		}
+		
+		g.setColor(Color.RED);
+		g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
 
 //		for(int i =0; i!=100;i++) {
 //			
@@ -131,7 +155,7 @@ public class Ball {
 //		}
 		g.setColor(Utils.generateColor(lifetime, f));
 
-		g.fillOval((int) x - 5, (int) y - 5, 10, 10);
+		g.fillOval((int) (x - size / 2), (int) (y - size / 2), (int) size, (int) size);
 //		g.drawString("Y: " + (u*Math.sin(theta)-Math.pow(((0.5)*this.g*lifetime),2)),(int) x,(int) y-15);
 //		g.drawString("X: " + u*Math.cos(theta),(int) x,(int) y-30);
 
